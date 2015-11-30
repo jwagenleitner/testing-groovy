@@ -1,0 +1,12 @@
+apply plugin: 'groovy'
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
+
+    testCompile 'junit:junit:4.12'
+}
