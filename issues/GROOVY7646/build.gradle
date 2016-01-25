@@ -1,0 +1,3 @@
+test {
+    jvmArgs '-XX:MaxMetaspaceSize=50m'
+}

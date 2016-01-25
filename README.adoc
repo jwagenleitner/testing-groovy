@@ -1,0 +1,21 @@
+= Functional Tests of Groovy
+
+These are tests that do things like `System.gc()`, spin up many threads, access internal fields of class and/or take
+a long time to complete.
+
+In order to run against master you'll need a clone of the groovy git repo.  You'll need to install in maven local repo,
+this can be done running the following command in the groovy git repo directory:
+
+`./gradlew install`
+
+Tests that are associated with a particular JIRA issues can be found under the *issues* directory.  For some tests it
+helps to adjust the available memory settings and/or set system properties, for example:
+
+```
+test {
+    minHeapSize = '256m'
+    maxHeapSize = '256m'
+    systemProperty 'groovy.use.classvalue', 'true'
+    jvmArgs '-XX:+HeapDumpOnOutOfMemoryError'
+}
+```

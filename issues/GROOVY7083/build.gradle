@@ -1,0 +1,5 @@
+test {
+    minHeapSize = '256m'
+    maxHeapSize = '256m'
+    jvmArgs '-XX:MaxMetaspaceSize=50m'
+}
