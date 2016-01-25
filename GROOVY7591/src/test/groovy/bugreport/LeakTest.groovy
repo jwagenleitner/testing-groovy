@@ -1,9 +1,11 @@
-package bugreport;
+package bugreport
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class LeakTest {
     @Test
+    @Ignore
     public void testForLeak() throws Exception{
         for(int i=1; i <= 10000 ; i++){
             GroovyClassLoader classLoader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader());

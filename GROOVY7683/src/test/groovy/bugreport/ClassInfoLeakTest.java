@@ -9,49 +9,46 @@ import static org.junit.Assert.*;
 
 public class ClassInfoLeakTest {
 
-    private static final int NUM_OBJECTS = 10;
-    private static final int OOM_BUFFER = 128 * 1024 * 1024;
+    private static final int NUM_OBJECTS = 31;
 
-    static {
-        System.out.println("Groovy Version: " + GroovySystem.getVersion() + "\n");
-    }
+    ReferenceQueue<ClassLoader> classLoaderQueue = new ReferenceQueue<ClassLoader>();
+    ReferenceQueue<Class<?>> classQueue = new ReferenceQueue<Class<?>>();
+    ReferenceQueue<ClassInfo> classInfoQueue = new ReferenceQueue<ClassInfo>();
 
-    ReferenceQueue<Class> q = new ReferenceQueue<Class>();
-    List<PhantomReference<Class>> prefs = new ArrayList<PhantomReference<Class>>(NUM_OBJECTS);
+    // Used to keep a hard reference to the PhantomReferences so they are not collected
+    List<Object> refList = new ArrayList<Object>(NUM_OBJECTS);
 
     @Test
-    public void testLeak() throws Exception {
+    public void testLeak() {
+        assertFalse(Boolean.getBoolean("groovy.use.classvalue"));
         for (int i = 0; i < NUM_OBJECTS; i++) {
             GroovyClassLoader gcl = new GroovyClassLoader();
             Class scriptClass = gcl.parseClass("int myvar = " + i);
             ClassInfo ci = ClassInfo.getClassInfo(scriptClass);
-            PhantomReference<Class> ref = new PhantomReference<Class>(scriptClass, q);
-            prefs.add(ref);
-            assertEquals(ci.getClass().getClassLoader(), this.getClass().getClassLoader());
-            assertNotEquals(scriptClass.getClass().getClassLoader(), this.getClass().getClassLoader());
+            PhantomReference<ClassLoader> classLoaderRef = new PhantomReference<ClassLoader>(gcl, classLoaderQueue);
+            PhantomReference<Class<?>> classRef = new PhantomReference<Class<?>>(scriptClass, classQueue);
+            PhantomReference<ClassInfo> classInfoRef = new PhantomReference<ClassInfo>(ci, classInfoQueue);
+            refList.add(classLoaderRef);
+            refList.add(classRef);
+            refList.add(classInfoRef);
             System.gc();
         }
         System.gc();
-        createOOM();
-        int gcCollectedCount = 0;
-        while (q.remove(5L) != null) {
-            gcCollectedCount++;
-        }
-        System.out.println("Found " + gcCollectedCount + " collected objects in ReferenceQueue");
-        assertEquals(NUM_OBJECTS, gcCollectedCount);
+        // Encourage GC to collect soft references
+        try { throw new OutOfMemoryError(); } catch(OutOfMemoryError oom) { }
+        System.gc();
+
+        // All objects should have been collected
+        assertEquals("GroovyClassLoaders not collected by GC", NUM_OBJECTS, queueSize(classLoaderQueue));
+        assertEquals("Script Classes not collected by GC", NUM_OBJECTS, queueSize(classQueue));
+        assertEquals("ClassInfo objects not collected by GC", NUM_OBJECTS, queueSize(classInfoQueue));
     }
 
-    // Create memory pressure to force soft references to be GC'd
-    private void createOOM() {
-        List<Long[]> buffer = new ArrayList<Long[]>(1000);
-        try {
-            for (int i = 0; i < 500000; i++) {
-                buffer.add(new Long[OOM_BUFFER]);
-            }
-        } catch (OutOfMemoryError oom) {
-            buffer.clear();
-            return;
+    private int queueSize(ReferenceQueue<?> queue) {
+        int size = 0;
+        while (queue.poll() != null) {
+            ++size;
         }
-        throw new RuntimeException("OOM expected");
+        return size;
     }
 }
