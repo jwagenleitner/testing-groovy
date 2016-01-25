@@ -1,1 +1,4 @@
-include 'core'
+include 'core',
+        'GROOVY7591',
+        'GROOVY7621',
+        'GROOVY7683'

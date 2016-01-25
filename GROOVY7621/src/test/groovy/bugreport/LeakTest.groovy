@@ -55,7 +55,7 @@ class LeakTest extends GroovyTestCase {
         def needsCleanup = []
         script.metaClass.propertyMissing = propMissing(needsCleanup)
 
-        for ( int i = 0; i < 1000000; i++) {
+        for ( int i = 0; i < 100000; i++) {
             script.run()
 //            if (!(i % 100)) {
                 // needsCleanup ... how to? I tried remove from metaClassRegistry to no avail...

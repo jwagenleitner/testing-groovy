@@ -1,26 +1,19 @@
 package bugreport;
 
-import groovy.lang.ExpandoMetaClass;
-import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovySystem;
-import groovy.lang.MetaClass;
-import groovy.lang.MetaClassRegistry;
-
 import org.junit.Test;
 
 public class LeakTest {
-        @Test
-        public void testForLeak() throws Exception{
-                for(int i=1; i <= 10000 ; i++){
-                        GroovyClassLoader classLoader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader());
-                        Class<?> clazz = classLoader.parseClass("print 'hello world'");
-                        ExpandoMetaClass metaClass = getExpandoMetaClass(clazz);
-                        System.gc();
-                        Thread.sleep(15);
-                        //System.out.println("Done " + i + " iterations");
-                }
+    @Test
+    public void testForLeak() throws Exception{
+        for(int i=1; i <= 10000 ; i++){
+            GroovyClassLoader classLoader = new GroovyClassLoader(Thread.currentThread().getContextClassLoader());
+            Class<?> clazz = classLoader.parseClass("print 'hello world'");
+            ExpandoMetaClass metaClass = getExpandoMetaClass(clazz);
+            System.gc();
+            Thread.sleep(2L);
         }
-        //--Begin copied unmodified from GrailsMetaClassUtils--//
+    }
+
     public static ExpandoMetaClass getExpandoMetaClass(Class<?> aClass) {
         MetaClassRegistry registry = getRegistry();
 
@@ -46,6 +39,5 @@ public class LeakTest {
     public static MetaClassRegistry getRegistry() {
         return GroovySystem.getMetaClassRegistry();
     }
-        //--End copied unmodified from GrailsMetaClassUtils--//
        
-} 
+}

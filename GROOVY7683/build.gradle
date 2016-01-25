@@ -1,16 +1,3 @@
-apply plugin: 'groovy'
-
-repositories {
-    jcenter()
-    mavenLocal()
-}
-
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.5'
-
-    testCompile 'junit:junit:4.12'
-}
-
 test {
     minHeapSize = '64m'
     maxHeapSize = '64m'

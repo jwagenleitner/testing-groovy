@@ -1,19 +1,4 @@
-apply plugin: 'groovy'
-
-repositories {
-    jcenter()
-    mavenLocal()
-}
-
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
-
-    testCompile 'junit:junit:4.12'
-}
-
 test {
     minHeapSize = '256m'
     maxHeapSize = '256m'
-//    systemProperty 'groovy.use.classvalue', 'true'
-//    jvmArgs '-XX:+HeapDumpOnOutOfMemoryError'
 }

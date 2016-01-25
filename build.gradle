@@ -1,6 +1,7 @@
 allprojects {
     apply plugin: 'java'
-    
+    apply plugin: 'groovy'
+
     repositories {
         jcenter()
         mavenLocal()
