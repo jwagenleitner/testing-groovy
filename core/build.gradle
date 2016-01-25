@@ -1,0 +1,6 @@
+//test {
+//    minHeapSize = '256m'
+ //   maxHeapSize = '256m'
+//    systemProperty 'groovy.use.classvalue', 'true'
+//    jvmArgs '-XX:+HeapDumpOnOutOfMemoryError'
+//}
