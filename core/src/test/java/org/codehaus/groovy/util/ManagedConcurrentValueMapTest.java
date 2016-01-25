@@ -1,7 +1,11 @@
 package org.codehaus.groovy.util;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+
+import groovy.lang.MetaClass;
+import org.codehaus.groovy.runtime.InvokerHelper;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -54,6 +58,11 @@ public class ManagedConcurrentValueMapTest {
         assertEquals(null, map.get("key77"));
         assertEquals(null, map.get("key1337"));
         assertEquals(null, map.get("key3559"));
+
+        // Check the size of the internal map
+        MetaClass metaClass = InvokerHelper.getMetaClass(map);
+        ConcurrentHashMap<String, Object> internalMap = (ConcurrentHashMap<String, Object>)metaClass.getProperty(map, "internalMap");
+        assertEquals(1, internalMap.size());
     }
 
 }
