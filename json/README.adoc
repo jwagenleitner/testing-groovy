@@ -1,0 +1,21 @@
+= Groovy JSON Tests
+
+Exercise the Groovy JSON parser against various JSON payloads.
+
+== Test Files and their origin
+
+* https://github.com/RichardHightower/json-benchmarks/tree/09d7593991a0516409565a0bed70b0b226782cd1/src/main/resources
+** citys.json
+** repos.json
+** request.json
+** user.json
+* https://github.com/RichardHightower/json-parsers-benchmark/tree/d39226e615c3b1d5811d37ffa7fc6b25b101adf8/data
+** citm_catalog.json
+* http://mtgjson.com/
+** AllSets-x.json
+** AllCards.json
+* https://edg.epa.gov/data.json
+** epa_data.json
+* http://www.usda.gov/data.json
+** usda_data.json
+
