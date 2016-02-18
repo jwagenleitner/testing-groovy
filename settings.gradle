@@ -1,25 +1,8 @@
-include 'core'
+include 'core', 
+    'subprojects/json',
+    'issues/GROOVY7083',
+    'issues/GROOVY7591',
+    'issues/GROOVY7621',
+    'issues/GROOVY7646',
+    'issues/GROOVY7683'
 
-def subprojects = [
-    'json'
-]
-
-def issues = [
-    'GROOVY7083',
-    'GROOVY7591',
-    'GROOVY7621',
-    'GROOVY7646',
-    'GROOVY7683'
-]
-
-include(subprojects as String[])
-include(issues as String[])
-
-rootProject.children.each { prj ->
-    if (prj in issues) {
-        prj.projectDir = new File("$rootDir/issues/$prj.name")
-    }
-    if (prj in subprojects) {
-        prj.projectDir = new File("$rootDir/subprojects/$prj.name")
-    }
-}
