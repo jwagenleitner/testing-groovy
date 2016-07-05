@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+repositories {
+    jcenter()
+    mavenLocal()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.7'
+    //compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
+
+    testCompile 'junit:junit:4.12'
+}
+
+test {
+    minHeapSize = '64m'
+    maxHeapSize = '64m'
+    systemProperty 'groovy.use.classvalue', 'true'
+//    jvmArgs '-XX:MaxPermSize=64m'
+}

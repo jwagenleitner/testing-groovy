@@ -8,6 +8,8 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Date;
+
 /**
  * Performance test the changes proposed https://github.com/apache/groovy/pull/325.
  * Assumption is that the size of the script parsed or the complexity of the
@@ -17,24 +19,14 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
  */
 public class Groovy7646Perf {
 
-    private static final Integer FORTY_TWO = Integer.valueOf(42);
-    private static final GroovyCodeSource gcs = new GroovyCodeSource("40 + 2", "Script1.groovy", GroovyShell.DEFAULT_CODE_BASE);
-
-    private void runEvaluate() {
+    @Benchmark
+    @BenchmarkMode({Mode.Throughput, Mode.AverageTime})
+    public Integer shellEvaluate() {
+        long time = new Date().getTime();
+        GroovyCodeSource gcs = new GroovyCodeSource("40 + 2 // " + time, "Script1.groovy", GroovyShell.DEFAULT_CODE_BASE);
         GroovyShell shell = new GroovyShell();
         Integer result = (Integer) shell.evaluate(gcs);
-        if (result != FORTY_TWO) {
-            throw new RuntimeException();
-        }
-    }
-
-    @Benchmark
-    @Warmup(iterations = 5)
-    @Measurement(iterations = 5)
-    @BenchmarkMode({Mode.Throughput, Mode.AverageTime, Mode.SingleShotTime})
-    @GroupThreads(2)
-    public void shellEvaluate() {
-        runEvaluate();
+        return result;
     }
 
     public static void main(String[] args) throws RunnerException {

@@ -1,9 +1,12 @@
 buildscript {
     repositories {
-        jcenter()
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        mavenLocal()
     }
     dependencies {
-        classpath "me.champeau.gradle:jmh-gradle-plugin:0.2.0"
+        classpath 'gradle.plugin.me.champeau.gradle:jmh-gradle-plugin:0.3.0'
     }
 }
 
@@ -18,7 +21,8 @@ allprojects {
     }
     
     dependencies {
-        compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
+        compile 'org.codehaus.groovy:groovy-all:2.4.7'
+        //compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
         //compile 'org.codehaus.groovy:groovy-all:2.4.7-SNAPSHOT'
         testCompile 'junit:junit:4.12'
     }
