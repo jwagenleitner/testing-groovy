@@ -23,7 +23,7 @@ allprojects {
     dependencies {
         //compile 'org.codehaus.groovy:groovy-all:2.4.7'
         //compile 'org.codehaus.groovy:groovy-all:2.5.0-SNAPSHOT'
-        compile 'org.codehaus.groovy:groovy-all:2.4.8-SNAPSHOT'
+        compile 'org.codehaus.groovy:groovy-all:2.4.8'
         testCompile 'junit:junit:4.12'
     }
 }
