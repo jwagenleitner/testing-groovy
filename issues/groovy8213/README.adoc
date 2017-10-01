@@ -1,0 +1,39 @@
+= GROOVY-8213
+
+Benchmarks to test the performance of a:
+
+1. normal field read
+1. volatile field read
+1. normal read with a re-read under sync if `false`
+
+The `initialized` variable in the `ClosureMetaClass` and `MetaClassImpl` classes
+is set in synchroinzed blocks but read (via `#isInitialized()`) without a sync.
+This allows for reading wrong values when under parallel execution.
+
+With the new `--parallel` feature in Gradle and builds being run on large core
+servers this problem seems to be coming up more frequently.
+
+See https://github.com/gradle/gradle/issues/1420
+
+== Running
+
+First build the JMH uber jar:
+
+    mvn clean install
+
+Then run the benchmark:
+
+    java -jar target/benchmarks.jar
+
+== Results
+
+Benchmarks run with jdk1.7.0_79, 1.8.0_144 and 9. The results below are representative
+of the results from those runs on a Ubuntu 17.04 with an Intel core i5 laptop.
+
+```
+Benchmark                                  Mode  Cnt       Score       Error   Units
+Groovy8213Bench.read_1_normal             thrpt   25  308293.831 ± 28856.359  ops/ms
+Groovy8213Bench.read_2_volatile           thrpt   25  305039.799 ± 28687.899  ops/ms
+Groovy8213Bench.read_3_check_with_sync_1  thrpt   25  250007.786 ± 50520.126  ops/ms
+Groovy8213Bench.read_4_check_with_sync_2  thrpt   25  280731.506 ± 26834.647  ops/ms
+```
